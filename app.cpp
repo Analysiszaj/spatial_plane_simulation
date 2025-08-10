@@ -43,6 +43,8 @@ App::App(const char *title, int width, int height)
   }
 
   init_imgui();
+  core_ = new Core();
+  core_->init_core();
 }
 
 void App::init_imgui()
@@ -60,7 +62,7 @@ void App::init_imgui()
   style.ScaleAllSizes(main_scale_);
   style.FontScaleDpi = 0.6f;
 
-  style.Alpha = 0.70f;
+  style.Alpha = 0.95f;
 
   ImGui_ImplGlfw_InitForOpenGL(window_, true);
   ImGui_ImplOpenGL3_Init("#version 330 core");
@@ -68,6 +70,17 @@ void App::init_imgui()
   style.FontSizeBase = 16.0f;
   // io.Fonts->AddFontDefault();
   io.Fonts->AddFontFromFileTTF("/Users/mds/my/spatial_plane_simulation/assets/AlimamaFangYuanTiVF-Thin-2.ttf");
+}
+
+void App::render_tool_gui()
+{
+  core_->render_tool_panel();
+}
+
+void App::render_gl_program()
+{
+  core_->render_grid();
+  core_->render_cube();
 }
 
 void App::app_run()
@@ -86,9 +99,7 @@ void App::app_run()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    if (show_demo_window_)
-      ImGui::ShowDemoWindow(&show_demo_window_);
-
+    render_tool_gui();
     ImGui::Render();
 
     int display_w, display_h;
@@ -96,11 +107,8 @@ void App::app_run()
     glViewport(0, 0, display_w, display_h);
     glClearColor(clear_color_.x * clear_color_.w, clear_color_.y * clear_color_.w, clear_color_.z * clear_color_.w, clear_color_.w);
     glClear(GL_COLOR_BUFFER_BIT);
+    render_gl_program();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    if (gl_render_callback)
-      gl_render_callback();
-
     glfwSwapBuffers(window_);
   }
 }
@@ -111,6 +119,7 @@ void App::app_exit()
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 
+  delete core_;
   glfwDestroyWindow(window_);
   glfwTerminate();
 

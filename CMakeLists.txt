@@ -9,6 +9,6 @@ add_subdirectory(./3rdparty/imgui)
 
 find_package(glm REQUIRED)
 
-add_executable(${PROJECT_NAME} main.cpp app.cpp)
+add_executable(${PROJECT_NAME} main.cpp app.cpp core.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui  glad glm::glm)
 target_include_directories(${PROJECT_NAME} PRIVATE ./3rdparty)

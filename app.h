@@ -8,29 +8,30 @@
 #include <imgui_impl_opengl3.h>
 #include <functional>
 
+#include "core.h"
+
 class App
 {
 private:
   float main_scale_ = 1.0f;
   bool show_demo_window_ = true;
   bool show_another_window_ = false;
-  ImVec4 clear_color_ = ImVec4(0.4f, 0.55f, 0.60f, 0.0f);
+  ImVec4 clear_color_ = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 
   GLFWwindow *window_;
-
-  std::function<void()> gl_render_callback;
+  Core *core_;
 
 public:
   App(const char *title, int width, int height);
-  void init_imgui();
+  ~App() = default;
+
   void app_run();
   void app_exit();
 
-  template <typename F>
-  void set_gl_render(F &&callback)
-  {
-    gl_render_callback = std::forward<F>(callback);
-  }
+private:
+  void init_imgui();
+  void render_tool_gui();
+  void render_gl_program();
 };
 
 #endif
