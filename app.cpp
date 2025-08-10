@@ -80,7 +80,9 @@ void App::render_tool_gui()
 void App::render_gl_program()
 {
   core_->render_grid();
-  core_->render_cube();
+  core_->render_track_boundaries(); // 先渲染赛道边界
+  core_->render_path();             // 然后渲染中心线
+  core_->render_cube();             // 最后渲染车子
 }
 
 void App::app_run()
